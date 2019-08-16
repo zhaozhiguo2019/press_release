@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>垃圾识别</title>
+    <link rel="stylesheet" href="dropzone/basic.min.css" />
+    <link rel="stylesheet" href="dropzone/dropzone.min.css" />
+    <script src="dropzone/dropzone.min.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="jquery/jquery-2.1.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="script/docs.min.js"></script>
+    <style>
+        .tree li {
+            list-style-type: none;
+            cursor:pointer;
+        }
+        table tbody tr:nth-child(odd){background:#F4F4F4;}
+        table tbody td:nth-child(even){color:#C00;}
+    </style>
+
+</head>
+<body>
+
+<div id="dropzoneDiv" class="dropzone"></div>
+
+<div class="table-responsive">
+    <table class="table  table-bordered" id="dataTable">
+        <thead>
+        <tr >
+            <th width="30"><input type="checkbox"></th>
+            <th>score</th>
+            <th>root</th>
+            <th>keyword</th>
+            <th width="100">操作</th>
+        </tr>
+        </thead>
+
+        <!--<tbody>-->
+        <!--<tr>-->
+            <!--<td>1</td>-->
+            <!--<td><input type="checkbox"></td>-->
+            <!--<td>Lorem</td>-->
+            <!--<td>ipsum</td>-->
+            <!--<td>dolor</td>-->
+            <!--<td>-->
+                <!--<button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>-->
+                <!--<button type="button" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>-->
+                <!--<button type="button" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>-->
+            <!--</td>-->
+        <!--</tr>-->
+
+        <!--</tbody>-->
+    </table>
+</div>
+<script>
+    Dropzone.options.dropzoneDiv = {
+            url: "fileUpAndDown/garbageDiscernController", // 文件提交地址
+            method: "post",  // 也可用put
+            paramName: "dropzFile", // 默认为file
+            maxFiles: 1,// 一次性上传的文件数量上限
+            maxFilesize: 2, // 文件大小，单位：MB
+            acceptedFiles: ".jpg,.gif,.png,.jpeg,.txt,.doc,.docx", // 上传的类型
+            addRemoveLinks: true,
+            parallelUploads: 1,// 一次上传的文件数量
+            //previewsContainer:"#preview", // 上传图片的预览窗口
+            dictDefaultMessage: '拖动文件至此或者点击上传',
+            dictMaxFilesExceeded: "您最多只能上传1个文件！",
+            dictResponseError: '文件上传失败!',
+            dictInvalidFileType: "文件类型只能是*.jpg,*.gif,*.png,*.jpeg,.txt,.doc,.docx。",
+            dictFallbackMessage: "浏览器不受支持",
+            dictFileTooBig: "文件过大上传文件最大支持.",
+            dictRemoveLinks: "删除",
+            dictCancelUpload: "取消",
+            init: function () {
+                this.on("addedfile", function (file) {
+                    // 上传文件时触发的事件
+                });
+                this.on("success", function (file, data) {
+                    // 上传成功触发的事件
+                    console.log(data);
+                    console.log(file);
+
+                    $(data.resultObj.result).each(function (index, item) {
+                        console.log(item);
+                        var trStr = "<tr>";
+                        //获取id并拼接
+                        trStr += "<td><input type=\"checkbox\"></td>";
+                        trStr += "<td>" + item.score + "</td>";
+                        // trStr += "<td><input type=\"checkbox\"></td>";
+                        trStr += "<td>" + item.root + "</td>";
+                        trStr += "<td>" + item.keyword + "</td>";
+                        trStr += "<td>";
+                        // trStr += "<button type=\"button\" class='btn btn-success btn-xs'><i class=' glyphicon glyphicon-check' onclick='assignRole(" + item.userid + ")'></i></button>&nbsp;"
+                        trStr += "<button type=\"button\" class='btn btn-primary btn-xs'><i class=' glyphicon glyphicon-pencil' onclick='editUser(" + item.userid + ")'></i></button>&nbsp;"
+                        // trStr += "<button type=\"button\" class='btn btn-danger btn-xs'><i class=' glyphicon glyphicon-remove' onclick='updateStatus(" + item.userid + ")'></i></button>"
+                        trStr += "</td>";
+                        trStr += "</tr>";
+                        $("#dataTable").append(trStr);
+                    });
+
+                    });
+
+
+                this.on("error", function (file, data) {
+                    // 上传失败触发的事件
+                    console.error(data);
+                    console.log(file);
+                });
+                this.on("removedfile", function (file) {
+                    // 删除文件时触发的方法
+                });
+            }
+
+        }
+</script>
+</body>
+</html>

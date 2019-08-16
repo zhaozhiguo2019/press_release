@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.dao.ArticleInfoMapper">
+
+    <select id="getReleaseInfoById" parameterType="int" resultType="com.qf.pojo.ArticleInfo">
+       select * from article where articleId=#{articleId}
+    </select>
+
+    <insert id="commitArticle" parameterType="com.qf.pojo.ArticleInfo">
+       INSERT into article
+       (articleId,areaId,userId,articleName,typeId,mainTitle,subTitle,content,status,creatTime,updateTime)
+       VALUES
+       (DEFAULT,#{areaId},#{userId},#{articleName},#{typeId},#{mainTitle},#{subTitle},#{content},#{status},CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+    </insert>
+
+
+    <select id="getArticleInfoIdById" parameterType="com.qf.pojo.ArticleInfo" resultType="com.qf.pojo.ArticleInfo">
+        select * from article where content=#{content}
+    </select>
+
+</mapper>
